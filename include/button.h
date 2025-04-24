@@ -6,9 +6,6 @@
 #define BUTTON_B 6    // GPIO conectado ao Botão B
 
 void button_init(); // Função para inicializar os botões
-bool button_a_pressed(); // Função para verificar se o Botão A foi pressionado
-bool button_b_pressed(); // Função para verificar se o Botão B foi pressionado
-bool button_a_released(); // Função para verificar se o Botão A foi liberado
-bool button_b_released(); // Função para verificar se o Botão B foi liberado
+void verify_buttons(); // Função para verificar o estado dos botões
 
 #endif // BUTTON_H

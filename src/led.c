@@ -17,3 +17,13 @@ void init_leds() {
     gpio_put(GREEN_LED_PIN, 0);
     gpio_put(BLUE_LED_PIN, 0);
 }
+
+void red_led_on() {
+    gpio_put(GREEN_LED_PIN, 0); // Desliga o LED verde
+    gpio_put(RED_LED_PIN, 1); // Liga o LED vermelho
+}
+
+void green_led_on() {
+    gpio_put(RED_LED_PIN, 0); // Desliga o LED vermelho
+    gpio_put(GREEN_LED_PIN, 1); // Liga o LED verde
+}

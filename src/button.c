@@ -1,5 +1,6 @@
 #include "button.h"
 #include "hardware/gpio.h" // Ensure this header is included for GPIO definitions
+#include "globals.h"
 
 /**
  * Inicializa os botões A e B.
@@ -18,33 +19,19 @@ void button_init(){
 }
 
 /**
- * Verifica se o Botão A foi pressionado.
- * Retorna verdadeiro se o botão A estiver pressionado, falso caso contrário.
+ * Verifica o estado dos botões A e B.
+ * Atualiza as variáveis globais entrada_a e entrada_b de acordo com o estado dos botões.
  */
-bool button_a_pressed() {
-    return !gpio_get(BUTTON_A); // Retorna verdadeiro se o botão A estiver pressionado
-}
+void verify_buttons() {
+    if (gpio_get(BUTTON_A) == 0) {
+        entrada_a = false; // Atualiza o valor da entrada A 
+    } else {
+        entrada_a = true; // Atualiza o valor da entrada A
+    }
 
-/**
- * Verifica se o Botão B foi pressionado.
- * Retorna verdadeiro se o botão B estiver pressionado, falso caso contrário.
- */
-bool button_b_pressed() {
-    return !gpio_get(BUTTON_B); // Retorna verdadeiro se o botão B estiver pressionado
-}
-
-/**
- * Verifica se o Botão A foi liberado.
- * Retorna verdadeiro se o botão A estiver liberado, falso caso contrário.
- */
-bool button_a_released() {
-    return gpio_get(BUTTON_A); // Retorna verdadeiro se o botão A estiver liberado
-}
-
-/**
- * Verifica se o Botão B foi liberado.
- * Retorna verdadeiro se o botão B estiver liberado, falso caso contrário.
- */
-bool button_b_released() {
-    return gpio_get(BUTTON_B); // Retorna verdadeiro se o botão B estiver liberado
+    if (gpio_get(BUTTON_B) == 0) {
+        entrada_b = false; // Atualiza o valor da entrada B
+    } else {
+        entrada_b = true; // Atualiza o valor da entrada B
+    }
 }

@@ -9,4 +9,10 @@
 // Função de inicialização do LED
 void init_leds();
 
+// Funções para controlar o LED vermelho
+void red_led_on();;
+
+// Funções para controlar o LED verde
+void green_led_on();
+
 #endif // LED_H

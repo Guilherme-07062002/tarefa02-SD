@@ -30,4 +30,14 @@ extern const char *opcoes[];
  */
 extern const unsigned int total_opcoes;
 
+/**
+ * Guarda valor da entrada A
+ */ 
+extern bool entrada_a;
+
+/**
+ * Guarda valor da entrada B
+ */
+extern bool entrada_b;
+
 #endif // GLOBALS_H

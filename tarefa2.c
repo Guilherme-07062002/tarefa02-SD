@@ -33,6 +33,56 @@ void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     if (opcao_alterada) {
         print_texto((char *)opcoes[opcao_atual], 18, 3); // Centralizado no display
     }
+
+    // De acordo com a opção selecionada, realiza a ação correspondente
+    verify_buttons(); // Verifica o estado dos botões
+    switch (opcao_atual) {
+        case 0: // AND
+            // Implementar lógica para AND
+            if (entrada_a && entrada_b) {
+                green_led_on(); // Liga o LED verde se ambas as entradas forem verdadeiras
+            } else {
+                red_led_on(); // Liga o LED vermelho se qualquer entrada for falsa
+            }
+            break;
+        case 1: // OR
+            if (entrada_a || entrada_b) {
+                green_led_on(); // Liga o LED verde se qualquer entrada for verdadeira
+            } else {
+                red_led_on(); // Liga o LED vermelho se ambas as entradas forem falsas
+            }
+            break;
+        case 2: // XOR
+            if (entrada_a ^ entrada_b) {
+                green_led_on(); // Liga o LED verde se apenas uma entrada for verdadeira
+            } else {
+                red_led_on(); // Liga o LED vermelho se ambas forem verdadeiras ou ambas falsas
+            }
+            break;
+        case 3: // NAND
+            if (!(entrada_a && entrada_b)) {
+                green_led_on(); // Liga o LED verde se não ambas as entradas forem verdadeiras
+            } else {
+                red_led_on(); // Liga o LED vermelho se ambas as entradas forem verdadeiras
+            }
+            break;
+        case 4: // NOR
+            if (!(entrada_a || entrada_b)) {
+                green_led_on(); // Liga o LED verde se ambas as entradas forem falsas
+            } else {
+                red_led_on(); // Liga o LED vermelho se qualquer entrada for verdadeira
+            }
+            break;
+        case 5: // XNOR
+            if (!(entrada_a ^ entrada_b)) {
+                green_led_on(); // Liga o LED verde se ambas as entradas forem iguais
+            } else {
+                red_led_on(); // Liga o LED vermelho se as entradas forem diferentes
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 // Função principal

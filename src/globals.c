@@ -13,3 +13,9 @@ const char *opcoes[] = {"AND", "OR", "XOR", "NAND", "NOR", "XNOR"};
 
 // Total de opções disponíveis no menu
 const unsigned int total_opcoes = 6;
+
+// Guarda valor da entrada A (Por padrão se inicia como true)
+bool entrada_a = true;
+
+// Guarda valor da entrada B
+bool entrada_b = true;
