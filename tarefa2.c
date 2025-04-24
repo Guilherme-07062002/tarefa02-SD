@@ -5,6 +5,7 @@
 #include "display.h"
 #include "joystick.h"
 #include "led.h"
+#include "button.h"
 
 // Função para inicializar periféricos
 void inicializa() {
@@ -18,6 +19,9 @@ void inicializa() {
 
     // Inicializa LEDs
     init_leds();
+
+    // Inicializa botões
+    button_init();
 }
 
 // Atualiza a opção selecionada com base no movimento vertical do joystick

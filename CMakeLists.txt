@@ -41,6 +41,7 @@ add_executable(tarefa2
     src/globals.c
     src/joystick.c
     src/led.c
+    src/button.c
     )
 
 pico_set_program_name(tarefa2 "tarefa2")
