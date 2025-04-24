@@ -20,6 +20,6 @@ void init_joystick();
  * 
  * @param vry_value Ponteiro para armazenar o valor lido.
  */
-void joystick_read_axis(uint16_t *vry_value);
+void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uint *histerese);
 
 #endif // JOYSTICK_H
