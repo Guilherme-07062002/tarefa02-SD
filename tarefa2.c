@@ -1,23 +1,10 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 
-#include "hardware/pwm.h"
-#include "hardware/clocks.h"
-
 #include "globals.h"
 #include "display.h"
 #include "joystick.h"
-
-// Definições de pinos e módulos
-#define BLUE_LED_PIN 12
-#define RED_LED_PIN 13
-#define GREEN_LED_PIN 11
-
-// Configurações de PWM
-#define DIVIDER_PWM 16.0
-#define PERIOD 4096
-#define PERIOD_LED_PWM 2000
-#define LED_STEP 100
+#include "led.h"
 
 // Função para inicializar periféricos
 void inicializa() {
@@ -30,15 +17,7 @@ void inicializa() {
     init_display();
 
     // Inicializa LEDs
-    gpio_init(RED_LED_PIN);
-    gpio_init(GREEN_LED_PIN);
-    gpio_init(BLUE_LED_PIN);
-    gpio_set_dir(RED_LED_PIN, GPIO_OUT);
-    gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
-    gpio_set_dir(BLUE_LED_PIN, GPIO_OUT);
-    gpio_put(RED_LED_PIN, 0);
-    gpio_put(GREEN_LED_PIN, 0);
-    gpio_put(BLUE_LED_PIN, 0);
+    init_leds();
 }
 
 // Atualiza a opção selecionada com base no movimento vertical do joystick

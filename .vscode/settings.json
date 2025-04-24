@@ -42,6 +42,8 @@
         "*.dbclient-js": "javascript",
         "*.embeddedhtml": "html",
         "globals.h": "c",
-        "display.h": "c"
+        "display.h": "c",
+        "stdlib.h": "c",
+        "pwm.h": "c"
     }
 }
