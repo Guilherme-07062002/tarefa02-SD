@@ -124,16 +124,6 @@ void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     print_texto((char *)opcoes[opcao_atual], 6, 18, 1.5);
 }
 
-// Verifica se o botão foi pressionado
-void verifica_botao() {
-    if (gpio_get(SW) == 0) {
-        print_texto("Pressionou", 6, 18, 1.5);
-        while (gpio_get(SW) == 0) {
-            sleep_ms(10);
-        }
-    }
-}
-
 // Função principal
 int main() {
     inicializa();
@@ -144,7 +134,6 @@ int main() {
 
     while (1) {
         atualiza_opcoes(&countup, &countdown, &histerese);
-        verifica_botao();
         sleep_ms(100);
     }
 
