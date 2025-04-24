@@ -30,6 +30,11 @@ ssd1306_t disp;
 bool program_running = false;
 uint pos_y = 12;
 
+// Variáveis globais para controle de opções
+uint opcao_atual = 0; // Índice da opção atual
+const char *opcoes[] = {"Opcao 1", "Opcao 2", "Opcao 3"}; // Lista de opções
+const uint total_opcoes = 3; // Total de opções
+
 // Função para inicializar periféricos
 void inicializa() {
     stdio_init_all();
@@ -109,6 +114,46 @@ void atualiza_menu(uint *countdown, uint *countup, uint *last_pos_y) {
     }
 }
 
+// Atualiza a opção selecionada com base no movimento horizontal do joystick
+void atualiza_opcoes(uint *countleft, uint *countright, uint *histerese) {
+    uint16_t vrx_value, vry_value;
+    joystick_read_axis(&vrx_value, &vry_value);
+
+    const uint adc_max = (1 << 12) - 1;
+    const uint limiar_esquerda = adc_max * 0.25; // Limiar para movimento à esquerda
+    const uint limiar_direita = adc_max * 0.75; // Limiar para movimento à direita
+
+    // Incrementa o contador de histerese
+    if (*histerese < 5) {
+        (*histerese)++;
+        return; // Aguarda até que o contador de histerese atinja o limite
+    }
+
+    // Verifica movimento para a esquerda
+    if (vrx_value < limiar_esquerda && *countleft == 0) {
+        opcao_atual = (opcao_atual == 0) ? total_opcoes - 1 : opcao_atual - 1;
+        *countleft = 1; // Marca que o movimento foi detectado
+        *countright = 0; // Reseta o contador do lado oposto
+        *histerese = 0; // Reseta o contador de histerese
+    }
+    // Verifica movimento para a direita
+    else if (vrx_value > limiar_direita && *countright == 0) {
+        opcao_atual = (opcao_atual + 1) % total_opcoes;
+        *countright = 1; // Marca que o movimento foi detectado
+        *countleft = 0; // Reseta o contador do lado oposto
+        *histerese = 0; // Reseta o contador de histerese
+    }
+    // Reseta os contadores se o joystick estiver na posição neutra
+    else if (vrx_value >= limiar_esquerda && vrx_value <= limiar_direita) {
+        *countleft = 0;
+        *countright = 0;
+    }
+
+    // Exibe a opção atual no display
+    ssd1306_clear(&disp);
+    print_texto((char *)opcoes[opcao_atual], 6, 18, 1.5);
+}
+
 // Verifica se o botão foi pressionado
 void verifica_botao() {
     if (gpio_get(SW) == 0) {
@@ -125,10 +170,14 @@ int main() {
 
     uint countdown = 0;
     uint countup = 2;
+    uint countleft = 0;
+    uint countright = 0; // Inicializado como 0 para evitar comportamento inesperado
     uint last_pos_y = pos_y;
+    uint histerese = 5; // Controle de histerese para suavizar mudanças rápidas
 
     while (1) {
         atualiza_menu(&countdown, &countup, &last_pos_y);
+        atualiza_opcoes(&countleft, &countright, &histerese);
         verifica_botao();
         sleep_ms(100);
     }
