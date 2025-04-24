@@ -1,18 +1,15 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware/i2c.h"
-#include "ssd1306.h"
-#include "hardware/adc.h"
+
 #include "hardware/pwm.h"
 #include "hardware/clocks.h"
 
+#include "globals.h"
+#include "display.h"
+#include "joystick.h" // Incluído o cabeçalho do joystick
+
 // Definições de pinos e módulos
-#define I2C_PORT i2c1
-#define PINO_SCL 14
-#define PINO_SDA 15
 #define SW 22
-#define VRY 27 // Eixo Y do joystick
-#define ADC_CHANNEL_1 1 // Canal ADC para o eixo Y
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
 #define GREEN_LED_PIN 11
@@ -23,32 +20,20 @@
 #define PERIOD_LED_PWM 2000
 #define LED_STEP 100
 
-// Variáveis globais
-ssd1306_t disp;
-bool program_running = false;
-uint pos_y = 12;
-
-// Variáveis globais para controle de opções
-uint opcao_atual = 0; // Índice da opção atual
-const char *opcoes[] = {"Opcao 1", "Opcao 2", "Opcao 3"}; // Lista de opções
-const uint total_opcoes = 3; // Total de opções
-
 // Função para inicializar periféricos
 void inicializa() {
     stdio_init_all();
 
-    // Inicializa ADC para joystick (eixo Y)
-    adc_init();
-    adc_gpio_init(VRY);
+    // Inicializa o joystick
+    init_joystick();
+
+    // Inicializa botão do joystick
+    gpio_init(SW);
+    gpio_set_dir(SW, GPIO_IN);
+    gpio_pull_up(SW);
 
     // Inicializa I2C e display OLED
-    i2c_init(I2C_PORT, 400 * 1000);
-    gpio_set_function(PINO_SCL, GPIO_FUNC_I2C);
-    gpio_set_function(PINO_SDA, GPIO_FUNC_I2C);
-    gpio_pull_up(PINO_SCL);
-    gpio_pull_up(PINO_SDA);
-    disp.external_vcc = false;
-    ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
+    init_display();
 
     // Inicializa LEDs
     gpio_init(RED_LED_PIN);
@@ -60,34 +45,12 @@ void inicializa() {
     gpio_put(RED_LED_PIN, 0);
     gpio_put(GREEN_LED_PIN, 0);
     gpio_put(BLUE_LED_PIN, 0);
-
-    // Inicializa botão do joystick
-    gpio_init(SW);
-    gpio_set_dir(SW, GPIO_IN);
-    gpio_pull_up(SW);
-
-    // Limpa display
-    ssd1306_clear(&disp);
-    ssd1306_show(&disp);
-}
-
-// Função para exibir texto no display
-void print_texto(char *msg, uint pos_x, uint pos_y, uint scale) {
-    ssd1306_draw_string(&disp, pos_x, pos_y, scale, msg);
-    ssd1306_show(&disp);
-}
-
-// Lê valores do eixo Y do joystick
-void joystick_read_axis(uint16_t *vry_value) {
-    adc_select_input(ADC_CHANNEL_1);
-    sleep_us(2);
-    *vry_value = adc_read();
 }
 
 // Atualiza a opção selecionada com base no movimento vertical do joystick
 void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     uint16_t vry_value;
-    joystick_read_axis(&vry_value);
+    joystick_read_axis(&vry_value); // Usa a função do joystick para ler o eixo Y
 
     const uint adc_max = (1 << 12) - 1;
     const uint limiar_cima = adc_max * 0.25; // Limiar para movimento para cima
@@ -120,7 +83,6 @@ void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     }
 
     // Exibe a opção atual no display
-    ssd1306_clear(&disp);
     print_texto((char *)opcoes[opcao_atual], 6, 18, 1.5);
 }
 

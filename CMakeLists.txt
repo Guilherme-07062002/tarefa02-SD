@@ -34,23 +34,32 @@ project(tarefa2 C CXX ASM)
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
-add_executable(tarefa2 tarefa2.c ssd1306.c)
+add_executable(tarefa2 
+    tarefa2.c 
+    src/ssd1306.c
+    src/display.c
+    src/globals.c
+    src/joystick.c
+    )
 
 pico_set_program_name(tarefa2 "tarefa2")
 pico_set_program_version(tarefa2 "0.1")
 
-# Generate PIO header (uncomment if needed)
-# pico_generate_pio_header(tarefa2 ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
-
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(tarefa2 1)
+pico_enable_stdio_uart(tarefa2 0)
 pico_enable_stdio_usb(tarefa2 1)
 
 # Add the standard library to the build
-target_link_libraries(tarefa2 pico_stdlib)
+target_link_libraries(tarefa2 
+    pico_stdlib
+    )
 
 # Add the standard include files to the build
-target_include_directories(tarefa2 PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(
+    tarefa2 PRIVATE 
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/include
+    )
 
 # Add any user requested libraries
 target_link_libraries(tarefa2 
