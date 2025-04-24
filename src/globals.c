@@ -9,6 +9,7 @@ unsigned int pos_y = 12;
 unsigned int opcao_atual = 0;
 
 // Lista de opções disponíveis no menu
-const char *opcoes[] = {"Opcao 1", "Opcao 2", "Opcao 3"};
+const char *opcoes[] = {"AND", "OR", "XOR", "NAND", "NOR", "XNOR"};
 
-const unsigned int total_opcoes = 3;
+// Total de opções disponíveis no menu
+const unsigned int total_opcoes = 6;

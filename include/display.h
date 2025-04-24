@@ -27,6 +27,6 @@ void clear_display();
  * @param pos_y Posição Y no display.
  * @param scale Escala do texto.
  */
-void print_texto(char *msg, uint pos_x, uint pos_y, uint scale);
+void print_texto(char *msg, uint pos_y, uint scale);
 
 #endif // DISPLAY_H

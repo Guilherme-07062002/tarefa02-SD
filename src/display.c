@@ -1,4 +1,5 @@
 #include "display.h"
+#include <string.h>
 
 ssd1306_t disp;
 
@@ -36,14 +37,17 @@ void clear_display() {
 }
 
 /**
- * Exibe texto no display OLED.
+ * Exibe texto no display OLED centralizado.
  * 
  * @param msg   Mensagem a ser exibida.
- * @param pos_x Posição X no display.
  * @param pos_y Posição Y no display.
  * @param scale Escala do texto.
  */
-void print_texto(char *msg, uint pos_x, uint pos_y, uint scale) {
+void print_texto(char *msg, uint pos_y, uint scale) {
+    // Calcula a largura do texto com base no tamanho da fonte e escala
+    uint text_width = strlen(msg) * 6 * scale; // Cada caractere tem 6px de largura na fonte padrão
+    uint pos_x = (128 - text_width) / 2;      // Centraliza o texto no eixo X
+
     clear_display(); // Limpa o display antes de exibir nova mensagem
     ssd1306_draw_string(&disp, pos_x, pos_y, scale, msg);
     ssd1306_show(&disp);
