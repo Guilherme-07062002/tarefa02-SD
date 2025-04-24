@@ -23,13 +23,9 @@ void init_joystick() {
  * @param countdown Ponteiro para o contador de movimento para baixo.
  * @param histerese Ponteiro para o contador de histerese para suavizar mudanças rápidas.
  * 
- * A função realiza as seguintes operações:
- * - Lê o valor do eixo Y do joystick usando o ADC.
- * - Verifica se o joystick foi movido para cima ou para baixo com base em limiares predefinidos.
- * - Atualiza a variável global `opcao_atual` para refletir a opção selecionada.
- * - Utiliza um mecanismo de histerese para evitar mudanças rápidas e instáveis.
+ * @return true se a opção foi alterada, false caso contrário.
  */
-void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uint *histerese) {
+bool joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uint *histerese) {
     adc_select_input(ADC_CHANNEL_1); // Seleciona o canal ADC para o eixo Y
     sleep_us(2); // Pequeno atraso para estabilizar a leitura
     *vry_value = adc_read(); // Lê o valor do ADC
@@ -41,7 +37,7 @@ void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uin
     // Incrementa o contador de histerese
     if (*histerese < 5) {
         (*histerese)++;
-        return; // Aguarda até que o contador de histerese atinja o limite
+        return false; // Aguarda até que o contador de histerese atinja o limite
     }
 
     // Verifica movimento para cima
@@ -50,6 +46,7 @@ void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uin
         *countup = 1; // Marca que o movimento foi detectado
         *countdown = 0; // Reseta o contador do lado oposto
         *histerese = 0; // Reseta o contador de histerese
+        return true; // Indica que a opção foi alterada
     }
     // Verifica movimento para baixo
     else if (*vry_value > limiar_baixo && *countdown == 0) {
@@ -57,10 +54,13 @@ void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uin
         *countdown = 1; // Marca que o movimento foi detectado
         *countup = 0; // Reseta o contador do lado oposto
         *histerese = 0; // Reseta o contador de histerese
+        return true; // Indica que a opção foi alterada
     }
     // Reseta os contadores se o joystick estiver na posição neutra
     else if (*vry_value >= limiar_cima && *vry_value <= limiar_baixo) {
         *countup = 0;
         *countdown = 0;
     }
+
+    return false; // Nenhuma alteração foi feita
 }

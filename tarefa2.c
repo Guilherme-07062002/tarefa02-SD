@@ -23,10 +23,12 @@ void inicializa() {
 // Atualiza a opção selecionada com base no movimento vertical do joystick
 void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     uint16_t vry_value;
-    joystick_read_axis(&vry_value, countup, countdown, histerese); // Ajustada para refletir a nova assinatura
+    bool opcao_alterada = joystick_read_axis(&vry_value, countup, countdown, histerese);
 
-    // Exibe a opção atual no display
-    print_texto((char *)opcoes[opcao_atual], 18, 3); // Centralizado no display
+    // Exibe a opção atual no display apenas se ela foi alterada
+    if (opcao_alterada) {
+        print_texto((char *)opcoes[opcao_atual], 18, 3); // Centralizado no display
+    }
 }
 
 // Função principal

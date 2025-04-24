@@ -1,5 +1,6 @@
 #include "display.h"
 #include <string.h>
+#include "globals.h"
 
 ssd1306_t disp;
 
@@ -26,6 +27,8 @@ void init_display() {
 
     // Limpa o display OLED
     clear_display();
+
+    print_texto((char *)opcoes[opcao_atual], 18, 3); // Centralizado no display
 }
 
 /**
