@@ -16,9 +16,18 @@ void init_joystick() {
 }
 
 /**
- * Lê o valor do eixo Y do joystick.
+ * Lê o valor do eixo Y do joystick e atualiza a opção selecionada.
  * 
- * @param vry_value Ponteiro para armazenar o valor lido.
+ * @param vry_value Ponteiro para armazenar o valor lido do eixo Y.
+ * @param countup   Ponteiro para o contador de movimento para cima.
+ * @param countdown Ponteiro para o contador de movimento para baixo.
+ * @param histerese Ponteiro para o contador de histerese para suavizar mudanças rápidas.
+ * 
+ * A função realiza as seguintes operações:
+ * - Lê o valor do eixo Y do joystick usando o ADC.
+ * - Verifica se o joystick foi movido para cima ou para baixo com base em limiares predefinidos.
+ * - Atualiza a variável global `opcao_atual` para refletir a opção selecionada.
+ * - Utiliza um mecanismo de histerese para evitar mudanças rápidas e instáveis.
  */
 void joystick_read_axis(uint16_t *vry_value, uint *countup, uint *countdown, uint *histerese) {
     adc_select_input(ADC_CHANNEL_1); // Seleciona o canal ADC para o eixo Y
