@@ -44,6 +44,7 @@
         "globals.h": "c",
         "display.h": "c",
         "stdlib.h": "c",
-        "pwm.h": "c"
+        "pwm.h": "c",
+        "led.h": "c"
     }
 }

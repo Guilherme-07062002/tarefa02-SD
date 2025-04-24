@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-
 #include "globals.h"
 #include "display.h"
 #include "joystick.h"
 #include "led.h"
 #include "button.h"
+#include "logic.h" // Incluído para usar as funções de lógica
 
 // Função para inicializar periféricos
 void inicializa() {
@@ -24,8 +24,11 @@ void inicializa() {
     button_init();
 }
 
-// Atualiza a opção selecionada com base no movimento vertical do joystick
-void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
+/**
+ * Comportamento principal do programa.
+ * Lê o joystick, atualiza a opção selecionada e executa a operação lógica correspondente.
+ */
+void comportamento_principal(uint *countup, uint *countdown, uint *histerese) {
     uint16_t vry_value;
     bool opcao_alterada = joystick_read_axis(&vry_value, countup, countdown, histerese);
 
@@ -35,61 +38,7 @@ void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
     }
 
     // De acordo com a opção selecionada, realiza a ação correspondente
-    verify_buttons(); // Verifica o estado dos botões
-    switch (opcao_atual) {
-        case 0: // AND
-            // Implementar lógica para AND
-            if (entrada_a && entrada_b) {
-                green_led_on(); // Liga o LED verde se ambas as entradas forem verdadeiras
-            } else {
-                red_led_on(); // Liga o LED vermelho se qualquer entrada for falsa
-            }
-            break;
-        case 1: // OR
-            if (entrada_a || entrada_b) {
-                green_led_on(); // Liga o LED verde se qualquer entrada for verdadeira
-            } else {
-                red_led_on(); // Liga o LED vermelho se ambas as entradas forem falsas
-            }
-            break;
-        case 2: // XOR
-            if (entrada_a ^ entrada_b) {
-                green_led_on(); // Liga o LED verde se apenas uma entrada for verdadeira
-            } else {
-                red_led_on(); // Liga o LED vermelho se ambas forem verdadeiras ou ambas falsas
-            }
-            break;
-        case 3: // NAND
-            if (!(entrada_a && entrada_b)) {
-                green_led_on(); // Liga o LED verde se não ambas as entradas forem verdadeiras
-            } else {
-                red_led_on(); // Liga o LED vermelho se ambas as entradas forem verdadeiras
-            }
-            break;
-        case 4: // NOR
-            if (!(entrada_a || entrada_b)) {
-                green_led_on(); // Liga o LED verde se ambas as entradas forem falsas
-            } else {
-                red_led_on(); // Liga o LED vermelho se qualquer entrada for verdadeira
-            }
-            break;
-        case 5: // XNOR
-            if (!(entrada_a ^ entrada_b)) {
-                green_led_on(); // Liga o LED verde se ambas as entradas forem iguais
-            } else {
-                red_led_on(); // Liga o LED vermelho se as entradas forem diferentes
-            }
-            break;
-        case 6: // NOT
-            if (!entrada_a) {
-                green_led_on(); // Liga o LED verde se a entrada A for falsa
-            } else {
-                red_led_on(); // Liga o LED vermelho se a entrada A for verdadeira
-            }
-            break;
-        default:
-            break;
-    }
+    execute_logic_operation(); // Executa a operação lógica correspondente
 }
 
 // Função principal
@@ -101,7 +50,7 @@ int main() {
     uint histerese = 5; // Controle de histerese para suavizar mudanças rápidas
 
     while (1) {
-        atualiza_opcoes(&countup, &countdown, &histerese);
+        comportamento_principal(&countup, &countdown, &histerese);
         sleep_ms(100);
     }
 
