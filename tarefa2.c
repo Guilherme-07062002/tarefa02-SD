@@ -80,6 +80,13 @@ void atualiza_opcoes(uint *countup, uint *countdown, uint *histerese) {
                 red_led_on(); // Liga o LED vermelho se as entradas forem diferentes
             }
             break;
+        case 6: // NOT
+            if (!entrada_a) {
+                green_led_on(); // Liga o LED verde se a entrada A for falsa
+            } else {
+                red_led_on(); // Liga o LED vermelho se a entrada A for verdadeira
+            }
+            break;
         default:
             break;
     }

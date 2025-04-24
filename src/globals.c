@@ -9,10 +9,10 @@ unsigned int pos_y = 12;
 unsigned int opcao_atual = 0;
 
 // Lista de opções disponíveis no menu
-const char *opcoes[] = {"AND", "OR", "XOR", "NAND", "NOR", "XNOR"};
+const char *opcoes[] = {"AND", "OR", "XOR", "NAND", "NOR", "XNOR", "NOT"};
 
 // Total de opções disponíveis no menu
-const unsigned int total_opcoes = 6;
+const unsigned int total_opcoes = 7;
 
 // Guarda valor da entrada A (Por padrão se inicia como true)
 bool entrada_a = true;
