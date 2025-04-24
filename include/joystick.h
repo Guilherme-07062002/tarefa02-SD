@@ -8,6 +8,8 @@
 #define VRY 27 // Pino do eixo Y do joystick
 #define ADC_CHANNEL_1 1 // Canal ADC para o eixo Y
 
+#define SW 22 // Pino do botão do joystick
+
 /**
  * Inicializa o joystick (configuração do ADC).
  */

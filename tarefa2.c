@@ -6,10 +6,9 @@
 
 #include "globals.h"
 #include "display.h"
-#include "joystick.h" // Incluído o cabeçalho do joystick
+#include "joystick.h"
 
 // Definições de pinos e módulos
-#define SW 22
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
 #define GREEN_LED_PIN 11
@@ -26,11 +25,6 @@ void inicializa() {
 
     // Inicializa o joystick
     init_joystick();
-
-    // Inicializa botão do joystick
-    gpio_init(SW);
-    gpio_set_dir(SW, GPIO_IN);
-    gpio_pull_up(SW);
 
     // Inicializa I2C e display OLED
     init_display();
