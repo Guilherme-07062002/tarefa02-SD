@@ -2,37 +2,30 @@
 #include <string.h>
 #include "globals.h"
 
-ssd1306_t disp;
+ssd1306_t disp; // Instância do display OLED
 
 /**
- * Inicializa o display OLED.
+ * Inicializa o display OLED configurando o I2C e limpando o display.
  */
 void init_display() {
-    // Inicializa I2C
-    i2c_init(I2C_PORT, 400 * 1000); // 400 KHz
-    
-    // Configura os pinos SCL e SDA
+    i2c_init(I2C_PORT, 400 * 1000); // Configura I2C a 400 KHz
+
     gpio_set_function(PINO_SCL, GPIO_FUNC_I2C);
     gpio_set_function(PINO_SDA, GPIO_FUNC_I2C);
 
-    // Configura os pinos como saída
     gpio_pull_up(PINO_SCL);
     gpio_pull_up(PINO_SDA);
 
-    // Configura o display OLED
     disp.external_vcc = false;
 
-    // Aloca memória para o buffer do display
     ssd1306_init(&disp, 128, 64, 0x3C, I2C_PORT);
 
-    // Limpa o display OLED
-    clear_display();
-
-    print_texto((char *)opcoes[opcao_atual], 18, 3); // Centralizado no display
+    clear_display(); // Limpa o display
+    print_texto((char *)opcoes[opcao_atual], 18, 3); // Exibe a opção inicial
 }
 
 /**
- * Limpa o display OLED.
+ * Limpa o conteúdo do display OLED.
  */
 void clear_display() {
     ssd1306_clear(&disp);
@@ -40,18 +33,17 @@ void clear_display() {
 }
 
 /**
- * Exibe texto no display OLED centralizado.
+ * Exibe texto centralizado no display OLED.
  * 
  * @param msg   Mensagem a ser exibida.
  * @param pos_y Posição Y no display.
  * @param scale Escala do texto.
  */
 void print_texto(char *msg, uint pos_y, uint scale) {
-    // Calcula a largura do texto com base no tamanho da fonte e escala
-    uint text_width = strlen(msg) * 6 * scale; // Cada caractere tem 6px de largura na fonte padrão
+    uint text_width = strlen(msg) * 6 * scale; // Calcula a largura do texto
     uint pos_x = (128 - text_width) / 2;      // Centraliza o texto no eixo X
 
-    clear_display(); // Limpa o display antes de exibir nova mensagem
+    clear_display(); // Limpa o display antes de exibir o texto
     ssd1306_draw_string(&disp, pos_x, pos_y, scale, msg);
     ssd1306_show(&disp);
 }
