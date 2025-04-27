@@ -51,11 +51,11 @@ void execute_logic_operation() {
                 red_led_on(); // Liga o LED vermelho se a operação OR for falsa
             }
             break;
-        case 2: // XOR
-            if(logic_xor(entrada_a, entrada_b)) {
-                green_led_on(); // Liga o LED verde se a operação XOR for verdadeira
+        case 2: // NOT
+            if(logic_not(entrada_a)) {
+                green_led_on(); // Liga o LED verde se a operação NOT for verdadeira
             } else {
-                red_led_on(); // Liga o LED vermelho se a operação XOR for falsa
+                red_led_on(); // Liga o LED vermelho se a operação NOT for falsa
             }
             break;
         case 3: // NAND
@@ -72,18 +72,18 @@ void execute_logic_operation() {
                 red_led_on(); // Liga o LED vermelho se a operação NOR for falsa
             }
             break;
-        case 5: // XNOR
+        case 5: // XOR
+            if(logic_xor(entrada_a, entrada_b)) {
+                green_led_on(); // Liga o LED verde se a operação XOR for verdadeira
+            } else {
+                red_led_on(); // Liga o LED vermelho se a operação XOR for falsa
+            }
+            break;
+        case 6: // XNOR
             if(logic_xnor(entrada_a, entrada_b)) {
                 green_led_on(); // Liga o LED verde se a operação XNOR for verdadeira
             } else {
                 red_led_on(); // Liga o LED vermelho se a operação XNOR for falsa
-            }
-            break;
-        case 6: // NOT
-            if(logic_not(entrada_a)) {
-                green_led_on(); // Liga o LED verde se a operação NOT for verdadeira
-            } else {
-                red_led_on(); // Liga o LED vermelho se a operação NOT for falsa
             }
             break;
     }
